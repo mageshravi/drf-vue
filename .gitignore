@@ -1,0 +1,9 @@
+# hidden files and folders
+.vscode/
+
+# files
+*.pyc
+*.sqlite3
+
+# folders
+node_modules/

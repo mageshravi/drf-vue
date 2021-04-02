@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+
+  reverse-proxy:
+    build: ./reverse-proxy/
+    container_name: reverse-proxy
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on:
+      - pure-drf
+      - pure-vue
+
+  pure-drf:
+    build: ./pure-drf/
+    command: python manage.py runserver 0:8000
+    container_name: pure-drf
+    volumes:
+      - ./pure-drf:/home/webinative/code
+      - ${HOME}/.gitconfig:/home/webinative/.gitconfig
+      - drf-vscode-cache:/home/webinative/.vscode-server
+    ports:
+      - 8000:8000
+
+  pure-vue:
+    build: ./pure-vue/
+    command: npm run serve
+    container_name: pure-vue
+    volumes:
+      - ./pure-vue:/home/node/code
+      - ${HOME}/.gitconfig:/home/node/.gitconfig
+      - vue-vscode-cache:/home/node/.vscode-server
+    ports:
+      - 8080:8080
+
+volumes:
+  drf-vscode-cache:
+  vue-vscode-cache:
